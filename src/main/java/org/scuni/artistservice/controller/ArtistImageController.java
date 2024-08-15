@@ -1,30 +1,39 @@
 package org.scuni.artistservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.scuni.artistservice.entity.Image;
 import org.scuni.artistservice.service.ArtistService;
 import org.scuni.artistservice.service.ImageService;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/v1/artis/image/")
+@RequestMapping("api/v1/images/")
 @RequiredArgsConstructor
 public class ArtistImageController {
     private final ImageService imageService;
     private final ArtistService artistService;
 
-    @PostMapping("{id}")
+    @PostMapping("/artist/{id}")
     public ResponseEntity<Object> uploadImage(@PathVariable("id") Integer id, MultipartFile image) {
         String imageFilename = imageService.upload(image);
         artistService.updateImageFilenameByImageFilename(imageFilename, id);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", "image was created"));
+    }
+
+    @GetMapping("/artist/{imageId}")
+    public ResponseEntity<ByteArrayResource> downloadImage(@PathVariable("imageId") String imageId) {
+        Image download = imageService.download(imageId);
+        String extension = download.getExtension();
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf("image/" + extension))
+                .body(new ByteArrayResource(download.getBytes()));
     }
 }

@@ -1,28 +1,44 @@
 package org.scuni.artistservice.service;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
+import io.minio.errors.MinioException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.scuni.artistservice.configuration.MinioProperties;
+import org.scuni.artistservice.entity.Image;
 import org.scuni.artistservice.exception.ImageUploadException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ImageService {
-    private static final String JPEG_EXTENSION = "jpeg";
-    private static final String PNG_EXTENSION = "png";
-    private static final String JPG_EXTENSION = "jpg";
 
     private final MinioClient minioClient;
     private final MinioProperties minioProperties;
+
+    public Image download(String fileName) {
+        byte[] imageBytes;
+        try (GetObjectResponse stream =
+                     minioClient.getObject(GetObjectArgs
+                             .builder()
+                             .bucket(minioProperties.getBucket())
+                             .object(fileName)
+                             .build())) {
+            imageBytes = stream.readAllBytes();
+        } catch (MinioException | InvalidKeyException | IOException |
+                 NoSuchAlgorithmException e) {
+            throw new ImageUploadException("Image download failed: " + e.getMessage());
+        }
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+        return new Image(imageBytes, extension);
+    }
 
     public String upload(MultipartFile file) {
         try {
