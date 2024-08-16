@@ -7,10 +7,10 @@ VALUES ('194a6eab-df5c-40b5-9c0a-efd493fab021.jpg', 'DJ Thunder'),
        ('4e825280-4236-4f9d-a6a2-6213cb74cffb.jpg', 'Bass Hunter');
 
 --changeset dezzzl:2
-INSERT INTO album (image_id, title)
-VALUES ('79dac124-f1e6-4bcd-9e30-5aaafac3f453.jpg','Thunder Beats'),
-       ('7ad0aa49-9252-41cf-99ae-e0c1e61ab82b.jpg','Melody Journey'),
-       ('84bec5d7-f8a0-42a7-8007-7519ec8bdce2.jpg', 'Bass Drop');
+INSERT INTO album (image_id, title, release_date)
+VALUES ('79dac124-f1e6-4bcd-9e30-5aaafac3f453.jpg', 'Thunder Beats', now()),
+       ('7ad0aa49-9252-41cf-99ae-e0c1e61ab82b.jpg', 'Melody Journey', now()),
+       ('84bec5d7-f8a0-42a7-8007-7519ec8bdce2.jpg', 'Bass Drop', now());
 
 --changeset dezzzl:3
 INSERT INTO track (image_id, title, release_date, album_id)

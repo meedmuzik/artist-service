@@ -21,7 +21,7 @@ public interface ArtistRepository extends JpaRepository<Artist, Integer> {
 
 
     @Query("select ta.trackId from TrackArtist ta where ta.artist.id = :artistId")
-    List<Integer> findTracksIdByArtistId(Integer artistId);
+    Page<Long> findTracksIdByArtistId(Integer artistId, Pageable pageable);
 
     @Query("select a from Artist a where a.nickname like %:nickname%")
     Page<Artist> findByNickname(Pageable pageable, String nickname);

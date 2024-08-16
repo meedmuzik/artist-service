@@ -23,5 +23,5 @@ public class TrackArtist {
     private Artist artist;
 
     @Column(name = "track_id")
-    private Integer trackId;
+    private Long trackId;
 }
