@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.scuni.artistservice.dto.ArtistCreateEditDto;
 import org.scuni.artistservice.dto.ArtistReadDto;
 import org.scuni.artistservice.dto.ArtistSearchReadDto;
-import org.scuni.artistservice.entity.TrackArtist;
 import org.scuni.artistservice.service.ArtistService;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,6 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ArtistController {
     private final ArtistService artistService;
+    private final StreamBridge streamBridge;
 
     @PostMapping("/artist")
     public ResponseEntity<Object> createArtist(@RequestBody @Validated ArtistCreateEditDto artistCreateEditDto) {
@@ -34,6 +35,7 @@ public class ArtistController {
 
     @GetMapping("/artist/{id}")
     public ResponseEntity<ArtistReadDto> getArtistById(@PathVariable @Min(1) Integer id, Pageable pageable) {
+        streamBridge.send("produce-out-0", "s");
         ArtistReadDto artist = artistService.getArtistById(id, pageable);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(artist);

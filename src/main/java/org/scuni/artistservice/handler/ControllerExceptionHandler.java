@@ -1,8 +1,6 @@
 package org.scuni.artistservice.handler;
 
-import org.scuni.artistservice.exception.ArtistNotFoundException;
 import org.scuni.artistservice.exception.DefaultArtistServiceException;
-import org.scuni.artistservice.exception.ImageUploadException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

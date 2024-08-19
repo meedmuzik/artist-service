@@ -3,7 +3,7 @@ spring:
     name: artist-service
   datasource:
     url: jdbc:postgresql://postgresql:5432/postgres
-    #    url: jdbc:postgresql://localhost:5433/postgres
+#    url: jdbc:postgresql://localhost:5433/postgres
     username: postgres
     password: password
   jpa:
@@ -16,6 +16,23 @@ spring:
   mvc:
     format:
       date: iso
+  cloud:
+    function:
+      definition: produce, consume
+    stream:
+      bindings:
+        produce-out-0:
+          destination: artist-track
+          binder: kafka
+#          content-type: application/json
+        consume-in-0:
+          destination: artist-track
+          binder: kafka
+#          content-type: application/json
+      kafka:
+        binder:
+          brokers: kafka:9092
+
 
 eureka:
   instance:
@@ -24,7 +41,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      #      defaultZone: http://localhost:8070/eureka
+#      defaultZone: http://localhost:8070/eureka
       defaultZone: http://eureka-server:8070/eureka
 
 server:
@@ -34,7 +51,7 @@ server:
 minio:
   bucket: images
   url: https://minio:9090
-  #  url: http://localhost:9000
+#  url: http://localhost:9000
   access-key: minioadmin
   secret-key: minioadmin
 
