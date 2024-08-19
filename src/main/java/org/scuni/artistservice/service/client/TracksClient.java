@@ -2,19 +2,18 @@ package org.scuni.artistservice.service.client;
 
 import org.scuni.artistservice.dto.TrackDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @FeignClient("tracks-service")
 public interface TracksClient {
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "api/v1/tracks/}",
-            consumes = "application/json"
-    )
-    List<TrackDto> getTracksByTracksId(@RequestBody List<Integer> tracksId);
+    @GetMapping(value = "api/v1/tracks", consumes = MediaType.APPLICATION_JSON_VALUE)
+    Map<String, List<TrackDto>> getTracksByTracksId(@RequestParam List<Long> ids);
+
+    @GetMapping(value = "api/v1/track/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    TrackDto getTrackByTrackId(@PathVariable Long id);
 }

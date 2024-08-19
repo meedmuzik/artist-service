@@ -14,11 +14,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ImageService {
+    private static final String JPEG_EXTENSION = "jpeg";
+    private static final String PNG_EXTENSION = "png";
+    private static final String JPG_EXTENSION = "jpg";
 
     private final MinioClient minioClient;
     private final MinioProperties minioProperties;
@@ -47,7 +51,7 @@ public class ImageService {
             throw new ImageUploadException("Image upload failed: "
                                            + e.getMessage());
         }
-        if (file.isEmpty() || file.getOriginalFilename() == null) {
+        if (file == null || file.isEmpty() || file.getOriginalFilename() == null) {
             throw new ImageUploadException("Image must have name.");
         }
         String fileName = generateFileName(file);
@@ -76,13 +80,14 @@ public class ImageService {
 
     private String generateFileName(MultipartFile file) {
         String extension = getExtension(file);
-        return UUID.randomUUID() + "." + extension;
+        if (Objects.equals(extension, JPEG_EXTENSION) || extension.equals(JPG_EXTENSION) || extension.equals(PNG_EXTENSION))
+            return UUID.randomUUID() + "." + extension;
+        else throw new ImageUploadException("File is not an image");
     }
 
     private String getExtension(MultipartFile file) {
         return file.getOriginalFilename()
-                .substring(file.getOriginalFilename()
-                                   .lastIndexOf(".") + 1);
+                .substring(file.getOriginalFilename().lastIndexOf(".") + 1);
     }
 
     @SneakyThrows
