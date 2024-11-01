@@ -11,9 +11,10 @@ import java.util.List;
 @Setter
 @Builder
 public class ArtistReadDto {
-    Integer id;
+    Long id;
     String nickname;
-    List<TrackDto> tracks;
     String imageUrl;
+    List<Long> trackIds;
+    List<TrackDto> tracks;
     Pageable pageable;
 }

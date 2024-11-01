@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-    public class ArtistSearchReadDto {
-    Integer id;
+public class ArtistSearchReadDto {
+    Long id;
     String nickname;
     String imageUrl;
 }
