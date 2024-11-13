@@ -22,7 +22,7 @@ public class ArtistImageController {
     private final ArtistService artistService;
 
     @PostMapping("/artist/{id}")
-    public ResponseEntity<Object> uploadImage(@PathVariable("id") Integer id, MultipartFile image) {
+    public ResponseEntity<Object> uploadImage(@PathVariable("id") Long id, MultipartFile image) {
         String imageFilename = imageService.upload(image);
         artistService.updateImageFilenameByImageFilename(imageFilename, id);
         return ResponseEntity.status(HttpStatus.CREATED)

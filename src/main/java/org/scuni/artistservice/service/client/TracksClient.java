@@ -12,8 +12,8 @@ import java.util.Map;
 @FeignClient("tracks-service")
 public interface TracksClient {
     @GetMapping(value = "api/v1/tracks", consumes = MediaType.APPLICATION_JSON_VALUE)
-    Map<String, List<TrackDto>> getTracksByTracksId(@RequestParam List<Long> ids);
+    Map<String, List<TrackDto>> getTracksByTracksId(@RequestParam("ids") List<Long> ids);
 
     @GetMapping(value = "api/v1/track/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    TrackDto getTrackByTrackId(@PathVariable Long id);
+    TrackDto getTrackByTrackId(@PathVariable("id") Long id);
 }

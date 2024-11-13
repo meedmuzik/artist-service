@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ArtistCreateDtoMapper implements Mapper<ArtistCreateEditDto, Artist> {
 
-
     @Override
     public Artist map(ArtistCreateEditDto object) {
         Artist artist = new Artist();
