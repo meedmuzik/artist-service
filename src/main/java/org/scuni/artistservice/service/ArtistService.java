@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.scuni.artistservice.dto.ArtistCreateEditDto;
 import org.scuni.artistservice.dto.ArtistReadDto;
 import org.scuni.artistservice.dto.ArtistSearchReadDto;
+import org.scuni.artistservice.dto.QueryDto;
 import org.scuni.artistservice.dto.TrackDto;
 import org.scuni.artistservice.entity.Artist;
 import org.scuni.artistservice.exception.ArtistNotFoundException;
@@ -14,6 +15,7 @@ import org.scuni.artistservice.mapper.ArtistCreateDtoMapper;
 import org.scuni.artistservice.mapper.ArtistReadDtoMapper;
 import org.scuni.artistservice.mapper.ArtistSearchReadDtoMapper;
 import org.scuni.artistservice.repository.ArtistRepository;
+import org.scuni.artistservice.service.client.CommentsClient;
 import org.scuni.artistservice.service.client.TracksClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,6 +37,7 @@ public class ArtistService {
     private final ArtistCreateDtoMapper artistCreateDtoMapper;
     private final ArtistSearchReadDtoMapper artistSearchReadDtoMapper;
     private final TracksClient tracksClient;
+    private final CommentsClient commentsClient;
 
     public ArtistReadDto createArtist(ArtistCreateEditDto artistCreateEditDto) {
         Artist artist = artistCreateDtoMapper.map(artistCreateEditDto);
@@ -88,6 +92,17 @@ public class ArtistService {
         }
         artist.addTrack(trackId);
         artistRepository.save(artist);
+        artistRepository.linkArtistToTrack(artistId, trackId);
     }
 
+    public List<ArtistReadDto> getRecommendedArtists(QueryDto query) {
+        log.info("query {}", query);
+        Map<String, List<Long>> recommendedCommentsIds = commentsClient.getRecommendedCommentsIds(query);
+        log.info("comments ids: {}", recommendedCommentsIds.get("commentsIds"));
+        return artistRepository.finArtistsByCommentsIds(recommendedCommentsIds.get("commentsIds"))
+                .stream()
+                .distinct()
+                .map(artistReadDtoMapper::map)
+                .collect(Collectors.toList());
+    }
 }
