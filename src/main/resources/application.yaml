@@ -1,18 +1,18 @@
 spring:
   application:
     name: artist-service
-  datasource:
-    url: jdbc:postgresql://postgresql:5432/postgres
-#    url: jdbc:postgresql://localhost:5433/postgres
-    username: postgres
-    password: password
-  jpa:
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        hbm2ddl:
-          auto: validate
+#  datasource:
+#    url: jdbc:postgresql://postgresql:5432/postgres
+##    url: jdbc:postgresql://localhost:5433/postgres
+#    username: postgres
+#    password: password
+#  jpa:
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+#        hbm2ddl:
+#          auto: validate
 
   mvc:
     format:
