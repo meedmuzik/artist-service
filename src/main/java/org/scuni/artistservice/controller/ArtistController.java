@@ -1,5 +1,4 @@
 package org.scuni.artistservice.controller;
-
 import lombok.RequiredArgsConstructor;
 import org.scuni.artistservice.dto.ArtistCreateEditDto;
 import org.scuni.artistservice.dto.ArtistReadDto;
@@ -7,6 +6,7 @@ import org.scuni.artistservice.dto.ArtistSearchReadDto;
 import org.scuni.artistservice.dto.QueryDto;
 import org.scuni.artistservice.service.ArtistService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -82,4 +82,15 @@ public class ArtistController {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Map.of("artists", recommendedArtists));
     }
+
+    @GetMapping("/artists/by-average-track-rating")
+    public ResponseEntity<Page<ArtistSearchReadDto>> getArtistsByAverageTrackRating(
+            @RequestParam("minRating") double minRating, @RequestParam int page,
+            @RequestParam int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ArtistSearchReadDto> artists = artistService.getArtistsByAverageTrackRatingGreaterThan(minRating, pageable);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(artists);
+    }
+
 }

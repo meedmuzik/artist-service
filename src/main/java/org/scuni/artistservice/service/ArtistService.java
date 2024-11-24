@@ -105,4 +105,9 @@ public class ArtistService {
                 .map(artistReadDtoMapper::map)
                 .collect(Collectors.toList());
     }
+    public Page<ArtistSearchReadDto> getArtistsByAverageTrackRatingGreaterThan(double minRating, Pageable pageable) {
+        Page<Artist> artists = artistRepository.findArtistsByTrackAverageRatingGreaterThan(minRating, pageable);
+        return artists.map(artistSearchReadDtoMapper::map);
+    }
+
 }

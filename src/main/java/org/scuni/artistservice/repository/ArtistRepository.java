@@ -29,4 +29,20 @@ public interface ArtistRepository extends Neo4jRepository<Artist, Long> {
            "RETURN DISTINCT a")
     List<Artist> finArtistsByCommentsIds(@Param("ids") List<Long> ids);
 
+    @Query(value = """
+        MATCH (a:Artist)-[:HAS_TRACK]->(t:Track)<-[:COMMENTED_ON]-(c:Comment)
+        WITH a, AVG(c.rating) AS avgTrackRating
+        WHERE avgTrackRating > $minRating
+        RETURN a
+        SKIP $skip LIMIT $limit
+        """,
+            countQuery = """
+        MATCH (a:Artist)-[:HAS_TRACK]->(t:Track)<-[:COMMENTED_ON]-(c:Comment)
+        WITH a, AVG(c.rating) AS avgTrackRating
+        WHERE avgTrackRating > $minRating
+        RETURN count(a)
+        """)
+    Page<Artist> findArtistsByTrackAverageRatingGreaterThan(@Param("minRating") double minRating, Pageable pageable);
+
+
 }
