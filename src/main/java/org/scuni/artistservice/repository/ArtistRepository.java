@@ -47,7 +47,7 @@ public interface ArtistRepository extends Neo4jRepository<Artist, Long> {
 
     @Query("""
            MATCH (a:Artist)-[:HAS_TRACK]->(t:Track)<-[:HAS_TRACK]-(other:Artist)
-           WHERE a.id = $artistId AND a <> other
+           WHERE id(a) = $artistId AND a <> other
            RETURN DISTINCT other
            """)
     Set<Artist> findFeaturedArtists(@Param("artistId") Long artistId);
