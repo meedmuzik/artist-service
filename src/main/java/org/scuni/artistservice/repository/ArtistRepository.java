@@ -8,6 +8,7 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ArtistRepository extends Neo4jRepository<Artist, Long> {
 
@@ -44,5 +45,11 @@ public interface ArtistRepository extends Neo4jRepository<Artist, Long> {
         """)
     Page<Artist> findArtistsByTrackAverageRatingGreaterThan(@Param("minRating") double minRating, Pageable pageable);
 
+    @Query("""
+           MATCH (a:Artist)-[:HAS_TRACK]->(t:Track)<-[:HAS_TRACK]-(other:Artist)
+           WHERE a.id = $artistId AND a <> other
+           RETURN DISTINCT other
+           """)
+    Set<Artist> findFeaturedArtists(@Param("artistId") Long artistId);
 
 }

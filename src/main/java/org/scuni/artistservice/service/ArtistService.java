@@ -23,8 +23,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -110,4 +114,15 @@ public class ArtistService {
         return artists.map(artistSearchReadDtoMapper::map);
     }
 
+    public List<ArtistReadDto> getFeaturedArtistByArtistId(long artistId) {
+        Set<Artist> featuredArtists = artistRepository.findFeaturedArtists(artistId);
+        Set<Artist> result = new HashSet<>(featuredArtists);
+        for (Artist featuredArtist : featuredArtists) {
+            Set<Artist> foundArtists = artistRepository.findFeaturedArtists(featuredArtist.getId());
+            foundArtists.stream()
+                    .filter(artist -> artist.getId() != artistId)
+                    .forEach(result::add);
+        }
+        return result.stream().map(artistReadDtoMapper::map).toList();
+    }
 }

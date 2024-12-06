@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -91,6 +92,14 @@ public class ArtistController {
         Page<ArtistSearchReadDto> artists = artistService.getArtistsByAverageTrackRatingGreaterThan(minRating, pageable);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(artists);
+    }
+
+    @GetMapping("/artists/feat/{id}")
+    public ResponseEntity<Object> getFeaturedArtistsByArtistId(@PathVariable("id") Long id){
+        List<ArtistReadDto> recommendedArtists = artistService.getFeaturedArtistByArtistId(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Map.of("artists", recommendedArtists));
     }
 
 }
