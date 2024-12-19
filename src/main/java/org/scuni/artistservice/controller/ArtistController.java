@@ -101,7 +101,7 @@ public class ArtistController {
                 .body(Map.of("artists", recommendedArtists));
     }
 
-    @PostMapping("/artistService/rating/{id}")
+    @PostMapping("/artist/rating/{id}")
     public ResponseEntity<Object> updateTrackRating(@PathVariable("id") Long id) {
         artistService.updateArtistRating(id);
         return ResponseEntity.noContent().build();
