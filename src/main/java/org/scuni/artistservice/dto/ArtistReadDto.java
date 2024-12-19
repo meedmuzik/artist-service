@@ -14,6 +14,7 @@ public class ArtistReadDto {
     Long id;
     String nickname;
     String imageUrl;
+    Double rating;
     List<Long> trackIds;
     List<TrackDto> tracks;
     Pageable pageable;

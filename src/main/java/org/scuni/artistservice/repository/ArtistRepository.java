@@ -52,4 +52,10 @@ public interface ArtistRepository extends Neo4jRepository<Artist, Long> {
            """)
     Set<Artist> findFeaturedArtists(@Param("artistId") Long artistId);
 
+    @Query("""
+        MATCH (a:Artist)-[:HAS_TRACK]->(t:Track)<-[:COMMENTED_ON]-(c:Comment)
+        WHERE id(a) = $artistId
+        RETURN AVG(c.rating) AS averageRating
+        """)
+    Double calculateArtistRating(@Param("artistId") Long id);
 }

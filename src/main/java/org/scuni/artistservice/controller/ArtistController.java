@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -100,6 +99,12 @@ public class ArtistController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Map.of("artists", recommendedArtists));
+    }
+
+    @PostMapping("/artistService/rating/{id}")
+    public ResponseEntity<Object> updateTrackRating(@PathVariable("id") Long id) {
+        artistService.updateArtistRating(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

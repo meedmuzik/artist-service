@@ -13,6 +13,7 @@ public class ArtistCreateDtoMapper implements Mapper<ArtistCreateEditDto, Artist
     public Artist map(ArtistCreateEditDto object) {
         Artist artist = new Artist();
         artist.setNickname(object.getNickname());
+        artist.setRating(0.0);
         return artist;
     }
 }

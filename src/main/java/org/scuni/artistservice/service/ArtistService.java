@@ -125,4 +125,14 @@ public class ArtistService {
         }
         return result.stream().map(artistReadDtoMapper::map).toList();
     }
+
+    public void updateArtistRating(Long id) {
+        Artist artist = artistRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Double updatedRating = artistRepository.calculateArtistRating(id);
+        if (updatedRating == null) {
+            updatedRating = 0.0;
+        }
+        artist.setRating(updatedRating);
+        artistRepository.save(artist);
+    }
 }

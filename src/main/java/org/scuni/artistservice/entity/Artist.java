@@ -25,6 +25,8 @@ public class Artist {
 
     private String imageFilename;
 
+    private Double rating;
+
     private List<Long> trackIds = new ArrayList<>();
 
     public boolean idTrackAlreadyExist(Long id){

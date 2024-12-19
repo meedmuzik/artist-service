@@ -16,6 +16,7 @@ public class ArtistReadDtoMapper implements Mapper<Artist, ArtistReadDto> {
                 .id(object.getId())
                 .nickname(object.getNickname())
                 .imageUrl(IMAGE_URL_PREFIX + object.getImageFilename())
+                .rating(object.getRating())
                 .trackIds(object.getTrackIds())
                 .build();
     }
